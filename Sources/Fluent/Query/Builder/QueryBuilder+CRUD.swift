@@ -20,7 +20,12 @@ extension QueryBuilder {
         // set timestamps
         let copy: Model
         if var timestampable = model as? AnyTimestampable {
-            let now = Date()
+            let now: Date
+            if let timezone = type(of: timestampable).fluentTimeZone {
+                now = Date().addingTimeInterval(TimeInterval(timezone.secondsFromGMT()))
+            } else {
+                now = Date()
+            }
             timestampable.fluentUpdatedAt = now
             timestampable.fluentCreatedAt = now
             copy = timestampable as! Model

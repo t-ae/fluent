@@ -15,6 +15,8 @@ public protocol Timestampable: AnyTimestampable {
     /// The date at which this model was last updated.
     /// nil if the model has not been created yet.
     static var updatedAtKey: UpdatedAtKey { get }
+    
+    static var timezone: TimeZone? { get }
 }
 
 extension Timestampable {
@@ -29,6 +31,14 @@ extension Timestampable {
         get { return self[keyPath: Self.updatedAtKey] }
         set { self[keyPath: Self.updatedAtKey] = newValue }
     }
+    
+    public static var fluentTimeZone: TimeZone? {
+        return timezone
+    }
+    
+    public static var timezone: TimeZone? {
+        return nil
+    }
 }
 
 /// Unfortunately we need this hack until we have existentials.
@@ -39,4 +49,6 @@ public protocol AnyTimestampable: AnyModel {
 
     /// Access the updated at property.
     var fluentUpdatedAt: Date? { get set }
+    
+    static var fluentTimeZone: TimeZone? { get }
 }
